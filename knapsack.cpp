@@ -9,6 +9,7 @@
 /// Prototypes
 
 int knapsackRecursive(int, int, std::vector<int>&, std::vector<int>&);
+int knapsack(int, int, std::vector<int>&, std::vector<int>&);
 
 /// --------------
 /// Driver Program
@@ -40,11 +41,11 @@ int main(int argc, char*argv[]) {
 		for(int index = 0; index < items; index++)
 			std::cin >> values[index];
 
-		for(int index = 0; index < item; index++)
+		for(int index = 0; index < items; index++)
 			std::cin >> weights[index];
 
 		// Process
-		profit = knapsackRecursive(capacity, items, values, weights);
+		profit = knapsack(capacity, items, values, weights);
 
 		// Output
 		std::cout << "Case #" << inputNumber << ": " << profit << std::endl;
@@ -72,5 +73,35 @@ int knapsackRecursive(int capacity, int items, std::vector<int>& values, std::ve
 
 	return std::max(values[items] + knapsackRecursive(capacity - weights[items], items - 1, values, weights),
 		knapsackRecursive(capacity, items - 1, values, weights));
+
+}
+
+int knapsack(int capacity, int items, std::vector<int>& values, std::vector<int>& weights) {
+
+	int** dp = new int*[items + 1];
+
+	for(int index = 0; index <= items; index++)
+		dp[index] = new int[capacity + 1];
+
+	for(int index = 0; index <= items; index++)
+		for(int weight = 0; weight <= capacity; weight++) {
+
+			if(!index || !weight) dp[index][weight] = 0;
+
+			else if (weights[index - 1] <=  weight) {
+
+				dp[index][weight] = std::max(values[index - 1] + 
+					dp[index - 1][weight - weights[index - 1]], 
+					dp[index - 1][weight]);
+
+			} else {
+
+				dp[index][weight] = dp[index - 1][weight];
+
+			}
+
+		}
+
+	return dp[items][capacity];
 
 }
