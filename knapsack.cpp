@@ -78,6 +78,7 @@ int knapsackRecursive(int capacity, int items, std::vector<int>& values, std::ve
 
 int knapsack(int capacity, int items, std::vector<int>& values, std::vector<int>& weights) {
 
+	// Create the dp table
 	int** dp = new int*[items + 1];
 
 	for(int index = 0; index <= items; index++)
